@@ -9,6 +9,7 @@
 
   "dependencies": {
     "express": "^4.15",
-    "mongoose": "^4.11"
+    "mongoose": "^4.11",
+    "uuid": "^3.1"
   }
 }
