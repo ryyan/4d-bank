@@ -17,7 +17,10 @@ function createAccount(req, res) {
 }
 
 function getAccount(req, res) {
-  return;
+  Account.findOne({_id: req.params.id}, (err, account) => {
+    if (err) console.log(err);
+    res.send(account);
+  });
 }
 
 function deposit(req, res) {
@@ -37,11 +40,9 @@ function main() {
   let app = express();
 
   // Set routes
-  app.route('/api/account')
-    .get((req, res) => getAccount(req, res))
-    .post((req, res) => createAccount(req, res))
-  app.route('/api/account/balance')
-    .post((req, res) => updateBalance(req, res))
+  app.post('/api/account', (req, res) => createAccount(req, res));
+  app.get('/api/account/:id', (req, res) => getAccount(req, res));
+  app.post('/api/account/:id/balance', (req, res) => updateBalance(req, res));
 
   // Set static file server route
   app.use('/', express.static('../client/dist'))
