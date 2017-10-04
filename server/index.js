@@ -6,8 +6,10 @@ let uuidv4 = require('uuid/v4');
 let accountSchema = mongoose.Schema({
   _id: String,
   balance: Number,
-  ledger: [{type: String, amount: Number, date: Date}]
+  createdAt: { type: Date, default: Date.now },
+  ledger: [{type: String, amount: Number, date: Date}],
 });
+accountSchema.index({'createdAt': 1}, {expireAfterSeconds: 300});
 let Account = mongoose.model('Account', accountSchema);
 
 async function createAccountHandler(req, res) {
