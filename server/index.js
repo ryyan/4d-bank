@@ -10,29 +10,62 @@ let accountSchema = mongoose.Schema({
 });
 let Account = mongoose.model('Account', accountSchema);
 
-function createAccountHandler(req, res) {
-  let account = new Account({_id: uuidv4(), balance: 0, ledger: []});
-  account.save((err, account) => {if (err) console.log(err)});
-  res.send(account);
-  console.log('Created account: ' + account._id);
+async function createAccountHandler(req, res) {
+  try {
+    res.send(await createAccount());
+  } catch(err) {
+    res.status(500).send(err);
+  }
 }
 
-function getAccountHandler(req, res) {
-  getAccount(req.params.id).then((account) => res.send(account))
-    .catch((err) => console.log(err))
-}
+function createAccount() {
+  return new Promise((resolve, reject) => {
+    const account = new Account({_id: uuidv4(), balance: 0, ledger: []});
 
-function getAccount(id) {
-  Account.findOne({_id: id}, (err, account) => {
-    return new Promise((resolve, reject) => {
-      if (err) reject(err);
-      resolve(account);
+    account.save((err, result) => {
+      if (err) {
+        console.error(err);
+        reject('Error creating account');
+      }
+      console.log('Created account: ' + result._id);
+      resolve(result);
     });
   });
 }
 
-function updateBalanceHandler(req, res) {
+async function getAccountHandler(req, res) {
+  try{
+    res.send(await getAccount(req.params.id));
+  } catch(err) {
+    res.status(500).send(err);
+  }
+}
+
+function getAccount(id) {
+  return new Promise((resolve, reject) => {
+    if (isUuid(id) == false) reject("ID must be UUID");
+
+    Account.findOne({_id: id}, (err, result) => {
+      if (err) {
+        console.error(err);
+        reject('Error getting account');
+      }
+      resolve(result);
+    });
+  });
+}
+
+async function updateBalanceHandler(req, res) {
+  let account = await getAccount(req.params.id);
+  res.send(await updateBalance(account._id, account.balance, req.query.type, req.query.amount));
+}
+
+function updateBalance(account_id, account_balance, transaction_type, transaction_amount) {
   return;
+}
+
+function isUuid(s) {
+  return s.match("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
 }
 
 function main() {
