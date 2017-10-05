@@ -1,0 +1,150 @@
+{
+	"variables": [],
+	"info": {
+		"name": "4d-bank",
+		"_postman_id": "4d23b13a-6e9b-2e95-4eb5-44ee72e4c5c2",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create account",
+			"request": {
+				"url": {
+					"raw": "localhost:8888/api/account?irate=0.1",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"account"
+					],
+					"query": [
+						{
+							"key": "irate",
+							"value": "0.1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "irate: Interest rate (0.001 to 0.1)"
+			},
+			"response": []
+		},
+		{
+			"name": "Get account",
+			"request": {
+				"url": {
+					"raw": "localhost:8888/api/account/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"account",
+						":id"
+					],
+					"query": [],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit or withdraw",
+			"request": {
+				"url": {
+					"raw": "localhost:8888/api/account/:id/balance?type=d&amount=100",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"account",
+						":id",
+						"balance"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "d",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "amount",
+							"value": "100",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "type: Transaction type (d for deposit or w for withdraw)\n\namount: Amount to deposit or withdraw"
+			},
+			"response": []
+		},
+		{
+			"name": "Time travel",
+			"request": {
+				"url": {
+					"raw": "localhost:8888/api/account/:id/time?months=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"account",
+						":id",
+						"time"
+					],
+					"query": [
+						{
+							"key": "months",
+							"value": "1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "months: Number of months to travel forward in time"
+			},
+			"response": []
+		}
+	]
+}
