@@ -6,13 +6,18 @@ let uuidv4 = require('uuid/v4');
 let accountSchema = mongoose.Schema({
   _id: String,
   balance: Number,
-  createdAt: {
+  createdDate: {
+    type: Date,
+    default: Date.now
+  },
+  currentDate: {
     type: Date,
     default: Date.now
   },
   transactions: [{
     t_type: String, // "type" is a mongoose keyword, hence "t_type"
     t_amount: Number,
+    balance: Number,
     date: {
       type: Date,
       default: Date.now
@@ -48,7 +53,7 @@ function createAccount() {
     account.save((err, result) => {
       if (err) {
         console.error(err);
-        reject('Error creating account');
+        return reject('Error creating account');
       }
       console.log('Created account: ' + result._id);
       resolve(result);
@@ -69,7 +74,7 @@ function getAccount(id) {
     console.log('Get account: ' + id);
 
     if (isUuid(id) == false) {
-      reject("ID must be UUID");
+      return reject("ID must be UUID");
     }
 
     Account.findOne({
@@ -77,10 +82,10 @@ function getAccount(id) {
     }, (err, result) => {
       if (err) {
         console.error(err);
-        reject('Error getting account');
+        return reject('Error getting account');
       }
       if (result == null) {
-        reject('Account does not exist');
+        return reject('Account does not exist');
       }
       resolve(result);
     });
@@ -102,10 +107,10 @@ function updateBalance(account, transaction_type, transaction_amount) {
 
     // Validate arguments
     if (account == null) {
-      reject('Account not found');
+      return reject('Account not found');
     }
     if (isNaN(transaction_amount) || transaction_amount <= 0) {
-      reject('Transaction amount must be a number greater than 0');
+      return reject('Transaction amount must be a number greater than 0');
     }
 
     // Calculate new account balance
@@ -117,23 +122,26 @@ function updateBalance(account, transaction_type, transaction_amount) {
         break;
       case 'w': // Withdraw
         if (account.balance - transaction_amount < 0) {
-          reject('Not enough funds');
+          return reject('Not enough funds');
         }
         new_balance = account.balance - transaction_amount;
         break;
       default:
-        reject('Invalid transaction type');
+        return reject('Invalid transaction type');
     }
 
     // Save changes
     Account.findByIdAndUpdate(account._id, {
       $set: {
-        balance: new_balance
+        balance: new_balance,
+        currentDate: Date.now()
       },
       $push: {
         transactions: {
           t_type: transaction_type,
           t_amount: transaction_amount,
+          balance: new_balance,
+          date: account.currentDate
         }
       }
     }, {
@@ -142,18 +150,22 @@ function updateBalance(account, transaction_type, transaction_amount) {
     }, (err, result) => {
       if (err) {
         console.error(err);
-        reject('Error updating account');
+        return reject('Error updating account');
       }
       if (result == null) {
-        reject('Account does not exist');
+        return reject('Account does not exist');
       }
       resolve(result);
     });
   });
 }
 
-function isUuid(s) {
-  return s.match("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
+function isUuid(str) {
+  return str.match("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
+}
+
+function isDate(date) {
+  return date instanceof Date && !isNaN(date.valueOf());
 }
 
 function main() {
