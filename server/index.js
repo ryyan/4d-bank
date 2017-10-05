@@ -2,27 +2,48 @@ let express = require('express');
 let mongoose = require('mongoose');
 let uuidv4 = require('uuid/v4');
 
-// Create mongo schema and model
+// Create mongo schema
 let accountSchema = mongoose.Schema({
   _id: String,
   balance: Number,
-  createdAt: { type: Date, default: Date.now },
-  ledger: [{type: String, amount: Number, date: Date}],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  transactions: [{
+    t_type: String, // "type" is a mongoose keyword, hence "t_type"
+    t_amount: Number,
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }]
 });
-accountSchema.index({'createdAt': 1}, {expireAfterSeconds: 300});
+
+// Add time-to-live index
+accountSchema.index({
+  'createdAt': 1
+}, {
+  expireAfterSeconds: 600
+});
+
+// Create mongo model
 let Account = mongoose.model('Account', accountSchema);
 
 async function createAccountHandler(req, res) {
   try {
     res.send(await createAccount());
-  } catch(err) {
+  } catch (err) {
     res.status(500).send(err);
   }
 }
 
 function createAccount() {
   return new Promise((resolve, reject) => {
-    const account = new Account({_id: uuidv4(), balance: 0, ledger: []});
+    const account = new Account({
+      _id: uuidv4(),
+      balance: 0
+    });
 
     account.save((err, result) => {
       if (err) {
@@ -36,21 +57,30 @@ function createAccount() {
 }
 
 async function getAccountHandler(req, res) {
-  try{
+  try {
     res.send(await getAccount(req.params.id));
-  } catch(err) {
+  } catch (err) {
     res.status(500).send(err);
   }
 }
 
 function getAccount(id) {
   return new Promise((resolve, reject) => {
-    if (isUuid(id) == false) reject("ID must be UUID");
+    console.log('Get account: ' + id);
 
-    Account.findOne({_id: id}, (err, result) => {
+    if (isUuid(id) == false) {
+      reject("ID must be UUID");
+    }
+
+    Account.findOne({
+      _id: id
+    }, (err, result) => {
       if (err) {
         console.error(err);
         reject('Error getting account');
+      }
+      if (result == null) {
+        reject('Account does not exist');
       }
       resolve(result);
     });
@@ -58,12 +88,68 @@ function getAccount(id) {
 }
 
 async function updateBalanceHandler(req, res) {
-  let account = await getAccount(req.params.id);
-  res.send(await updateBalance(account._id, account.balance, req.query.type, req.query.amount));
+  try {
+    const account = await getAccount(req.params.id);
+    res.send(await updateBalance(account, req.query.type, parseFloat(req.query.amount)));
+  } catch (err) {
+    res.status(500).send(err);
+  }
 }
 
-function updateBalance(account_id, account_balance, transaction_type, transaction_amount) {
-  return;
+function updateBalance(account, transaction_type, transaction_amount) {
+  return new Promise((resolve, reject) => {
+    console.log('Updating balance: account=%s, type=%s, amount=%d', account, transaction_type, transaction_amount);
+
+    // Validate arguments
+    if (account == null) {
+      reject('Account not found');
+    }
+    if (isNaN(transaction_amount) || transaction_amount <= 0) {
+      reject('Transaction amount must be a number greater than 0');
+    }
+
+    // Calculate new account balance
+    let new_balance = 0;
+    switch (transaction_type) {
+      case 'd': // Deposit
+      case 'i': // Interest
+        new_balance = account.balance + transaction_amount;
+        break;
+      case 'w': // Withdraw
+        if (account.balance - transaction_amount < 0) {
+          reject('Not enough funds');
+        }
+        new_balance = account.balance - transaction_amount;
+        break;
+      default:
+        reject('Invalid transaction type');
+    }
+
+    // Save changes
+    Account.findByIdAndUpdate(account._id, {
+      $set: {
+        balance: new_balance
+      },
+      $push: {
+        transactions: {
+          t_type: transaction_type,
+          t_amount: transaction_amount,
+        }
+      }
+    }, {
+      safe: true, // Confirm data is written before returning
+      new: true // Returns the updated row
+    }, (err, result) => {
+      if (err) {
+        console.error(err);
+        reject('Error updating account');
+      }
+      if (result == null) {
+        reject('Account does not exist');
+      }
+      resolve(result);
+    });
+  });
 }
 
 function isUuid(s) {
@@ -72,7 +158,9 @@ function isUuid(s) {
 
 function main() {
   // Connect to mongo
-  mongoose.connect('mongodb://mongo/4dbank', {useMongoClient: true});
+  mongoose.connect('mongodb://mongo/4dbank', {
+    useMongoClient: true
+  });
   mongoose.Promise = global.Promise;
 
   // Initialize app
@@ -87,7 +175,7 @@ function main() {
   app.use('/', express.static('../client/dist'))
 
   // Start server
-  app.listen(8888, ()=> console.log('Server started on port 8888'));
+  app.listen(8888, () => console.log('Server started on port 8888'));
 }
 
 main();
