@@ -1,6 +1,6 @@
-# 4-D Bank
+# 4D Bank
 
-Personal banking taken the next dimension.
+Personal banking taken to the next dimension.
 
 Written with the MEAN stack.
 
@@ -14,4 +14,11 @@ docker-compose build
 
 ```
 docker-compose run -p 8888:8888 -T web
+```
+
+#### Development
+
+```
+docker-compose run -p 8888:8888 web sh
+node server/index.js
 ```
