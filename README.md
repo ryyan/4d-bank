@@ -21,7 +21,7 @@ docker-compose run -p 8888:8888 -T web
 ```
 docker-compose run -p 8888:8888 web sh
 cd client
-yarn run watch
+yarn run watch &
 cd ..
 node server/index.js
 ```
