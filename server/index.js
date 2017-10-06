@@ -2,6 +2,7 @@ let express = require('express');
 let mongoose = require('mongoose');
 let uuidv4 = require('uuid/v4');
 let moment = require('moment');
+let path = require('path');
 
 // Create mongo schema
 let accountSchema = mongoose.Schema({
@@ -288,14 +289,18 @@ function main() {
   // Initialize app
   let app = express();
 
-  // Set routes
+  // Set API routes
   app.post('/api/account', (req, res) => createAccountHandler(req, res));
   app.get('/api/account/:id', (req, res) => getAccountHandler(req, res));
   app.post('/api/account/:id/balance', (req, res) => updateBalanceHandler(req, res));
   app.post('/api/account/:id/time', (req, res) => updateTimeHandler(req, res));
 
   // Set static file server route
-  app.use('/', express.static('../client/dist'))
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+
+  // Serve index.html on all remaining routes to leave routing up to Angular
+  // https://stackoverflow.com/questions/20396900/angularjs-routing-in-expressjs
+  app.all('/*', (req, res) => res.sendFile(path.join(__dirname, '../client/dist/index.html')));
 
   // Start server
   app.listen(8888, () => console.log('Server started on port 8888'));
