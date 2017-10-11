@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AccountService } from '../services/account.service';
+import { Account, Transaction } from '../models/account';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  result: Account;
+
+  constructor(private accountService: AccountService) { }
 
   ngOnInit() {
+  }
+
+  createAccount() {
+    this.accountService.createAccount(0.01).subscribe(res => {this.result = res});
   }
 
 }
