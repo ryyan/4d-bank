@@ -16,10 +16,10 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private accountService: AccountService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  createAccount() {
+  createAccount(): void {
     this.accountService
       .createAccount(0.01)
       .subscribe(res => {this.router.navigate(['/account', res._id])});
