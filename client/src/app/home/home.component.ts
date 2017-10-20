@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import 'rxjs/add/operator/switchMap';
 
 import { AccountService } from '../services/account.service';
 import { Account, Transaction } from '../models/account';
@@ -10,15 +12,16 @@ import { Account, Transaction } from '../models/account';
 })
 export class HomeComponent implements OnInit {
 
-  result: Account;
-
-  constructor(private accountService: AccountService) { }
+  constructor(
+    private router: Router,
+    private accountService: AccountService) { }
 
   ngOnInit() {
   }
 
   createAccount() {
-    this.accountService.createAccount(0.01).subscribe(res => {this.result = res});
+    this.accountService
+      .createAccount(0.01)
+      .subscribe(res => {this.router.navigate(['/account', res._id])});
   }
-
 }
