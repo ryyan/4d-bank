@@ -12,25 +12,44 @@ import { Account, Transaction } from '../models/account';
 })
 export class AccountComponent implements OnInit {
 
-  private account: Account;
-  private account_id: string;
+  account: Account;
+  transaction_amount: number = 0.0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private accountService: AccountService) { }
+    private service: AccountService) { }
 
-  async ngOnInit() {
+  ngOnInit(): void {
+    // Load account based on url
     this.route
       .paramMap
-      .switchMap((params: ParamMap) => this.accountService.getAccount(params.get('id')))
+      .switchMap((params: ParamMap) => this.service.getAccount(params.get('id')))
       .subscribe((res: Account) => {
         this.account = res
 
         // Reroute back to home page if account does not exist
-        if (this.account == null || this.account._id == '') {
+        if (this.account == null) {
           this.router.navigate(['/']);
         }
+      });
+  }
+
+  depositOrWithdraw(transaction_type: string): void {
+    this.service
+      .updateBalance(this.account._id, transaction_type, this.transaction_amount)
+      .subscribe((res: Transaction) => {
+        this.account.transactions.push(res);
+        this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
+      });
+  }
+
+  advanceTime(months: number): void {
+    this.service
+      .updateTime(this.account._id, months)
+      .subscribe((res: Transaction[]) => {
+        this.account.transactions.push(...res);
+        this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
       });
   }
 }

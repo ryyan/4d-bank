@@ -1,3 +1,37 @@
-<p>
-  account works!
-</p>
+<section id='account' *ngIf='account'>
+  <section id='account-info'>
+    <p>ID: {{account._id}}</p>
+    <p>Balance: {{account.balance}}</p>
+    <p>Interest Rate: {{account.interest_rate}}</p>
+  </section>
+
+  <section id='actions'>
+    <input [(ngModel)]='transaction_amount' placeholder='$'>
+    <button (click)='depositOrWithdraw("d")'>Deposit</button>
+    <button (click)='depositOrWithdraw("w")'>Withdraw</button>
+  </section>
+
+  <section id='time'>
+    <p>Advance time...</p>
+    <button (click)='advanceTime(1)'>1 Month</button>
+    <button (click)='advanceTime(12)'>1 Year</button>
+    <button (click)='advanceTime(120)'>1 Decade</button>
+  </section>
+
+  <section id='transactions'>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Balance</th>
+        <th>Date</th>
+      </tr>
+      <tr *ngFor='let trans of account.transactions'>
+        <td>{{trans.t_type}}</td>
+        <td>{{trans.t_amount}}</td>
+        <td>{{trans.balance}}</td>
+        <td>{{trans.date}}</td>
+      </tr>
+    </table>
+  </section>
+</section>

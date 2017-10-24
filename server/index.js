@@ -179,9 +179,7 @@ function updateBalance(account, transaction_type, transaction_amount) {
 
     // Return the new transaction
     result = {
-      balance: new_balance,
-      current_date: new_date,
-      transactions: new_transaction
+      new_transaction
     };
     resolve(result);
   });
@@ -267,8 +265,6 @@ function updateTime(account, months) {
 
     // Return the list of new transactions
     result = {
-      balance: last_transaction.balance,
-      current_date: last_transaction.date,
       transactions: new_transactions
     }
     resolve(result);

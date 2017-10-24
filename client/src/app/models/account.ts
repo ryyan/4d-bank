@@ -1,15 +1,18 @@
 export class Account {
-  _id: string;
-  balance: number;
-  interest_rate: number;
-  created_date: string;
-  current_date: string;
-  transactions: Array<Transaction>;
+  constructor(
+    public _id: string,
+    public balance: number,
+    public interest_rate: number,
+    public created_date: number,
+    public current_date: string,
+    public transactions: Transaction[]) {
+  }
 }
 
 export class Transaction {
-  t_type: string;
-  t_amount: number;
-  balance: number;
-  date: string;
+  constructor(
+    public t_type: string,
+    public t_amount: number,
+    public balance: number,
+    public date: string) {}
 }
