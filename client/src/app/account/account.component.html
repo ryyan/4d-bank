@@ -1,21 +1,22 @@
 <section id='account' *ngIf='account'>
   <section id='account-info'>
     <p>ID: {{account._id}}</p>
+    <p>Created: {{account.created_date | date:'MM/yyyy'}}</p>
+    <p>Interest Rate: {{account.interest_rate | percent:'1.2-2'}}</p>
     <p>Balance: {{account.balance | currency:'USD':true:'1.2-2'}}</p>
-    <p>Interest Rate: {{account.interest_rate | percent}}</p>
   </section>
 
   <section id='actions'>
-    <input [(ngModel)]='transaction_amount' placeholder='$'>
+    <input [(ngModel)]='t_amount' placeholder='$'>
     <button (click)='depositOrWithdraw("d")'>Deposit</button>
     <button (click)='depositOrWithdraw("w")'>Withdraw</button>
   </section>
 
   <section id='time'>
-    <p>Advance time...</p>
-    <button (click)='advanceTime(1)'>1 Month</button>
-    <button (click)='advanceTime(12)'>1 Year</button>
-    <button (click)='advanceTime(120)'>1 Decade</button>
+    Advance time by 1...
+    <button (click)='advanceTime(1)'>Month</button>
+    <button (click)='advanceTime(12)'>Year</button>
+    <button (click)='advanceTime(120)'>Decade</button>
   </section>
 
   <section id='transactions'>

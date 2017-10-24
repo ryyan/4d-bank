@@ -13,7 +13,7 @@ import { Account, Transaction } from '../models/account';
 export class AccountComponent implements OnInit {
 
   account: Account;
-  transaction_amount: number = 0.0;
+  t_amount: number = 0.0;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,10 +37,10 @@ export class AccountComponent implements OnInit {
 
   depositOrWithdraw(transaction_type: string): void {
     this.service
-      .updateBalance(this.account._id, transaction_type, this.transaction_amount)
+      .updateBalance(this.account._id, transaction_type, this.t_amount)
       .subscribe((res: Transaction) => {
         this.account.transactions.push(res);
-        this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
+        this.updateBalance();
       });
   }
 
@@ -49,8 +49,12 @@ export class AccountComponent implements OnInit {
       .updateTime(this.account._id, months)
       .subscribe((res: Transaction[]) => {
         this.account.transactions.push(...res);
-        this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
+        this.updateBalance();
       });
+  }
+
+  updateBalance(): void {
+    this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
   }
 
   parseTransactionType(t: string): string {
