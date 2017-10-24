@@ -178,10 +178,7 @@ function updateBalance(account, transaction_type, transaction_amount) {
     });
 
     // Return the new transaction
-    result = {
-      new_transaction
-    };
-    resolve(result);
+    resolve(new_transaction);
   });
 }
 
@@ -264,10 +261,7 @@ function updateTime(account, months) {
     });
 
     // Return the list of new transactions
-    result = {
-      transactions: new_transactions
-    }
-    resolve(result);
+    resolve(new_transactions);
   });
 }
 
