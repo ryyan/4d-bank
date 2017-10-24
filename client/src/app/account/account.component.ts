@@ -36,6 +36,11 @@ export class AccountComponent implements OnInit {
   }
 
   depositOrWithdraw(transaction_type: string): void {
+    // Verify input
+    if (isNaN(this.t_amount) || this.t_amount <= 0) {
+      return;
+    }
+
     this.service
       .updateBalance(this.account._id, transaction_type, this.t_amount)
       .subscribe((res: Transaction) => {
