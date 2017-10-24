@@ -52,4 +52,17 @@ export class AccountComponent implements OnInit {
         this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
       });
   }
+
+  parseTransactionType(t: string): string {
+    switch(t) {
+      case 'd':
+        return 'Deposit';
+      case 'w':
+        return 'Withdraw';
+      case 'i':
+        return 'Interest';
+      default:
+        return 'Unknown';
+    }
+  }
 }

@@ -1,8 +1,8 @@
 <section id='account' *ngIf='account'>
   <section id='account-info'>
     <p>ID: {{account._id}}</p>
-    <p>Balance: {{account.balance}}</p>
-    <p>Interest Rate: {{account.interest_rate}}</p>
+    <p>Balance: {{account.balance | currency:'USD':true:'1.2-2'}}</p>
+    <p>Interest Rate: {{account.interest_rate | percent}}</p>
   </section>
 
   <section id='actions'>
@@ -26,11 +26,11 @@
         <th>Balance</th>
         <th>Date</th>
       </tr>
-      <tr *ngFor='let trans of account.transactions'>
-        <td>{{trans.t_type}}</td>
-        <td>{{trans.t_amount}}</td>
-        <td>{{trans.balance}}</td>
-        <td>{{trans.date}}</td>
+      <tr *ngFor='let trans of account.transactions.reverse()'>
+        <td>{{parseTransactionType(trans.t_type)}}</td>
+        <td>{{trans.t_amount | currency:'USD':true:'1.2-2'}}</td>
+        <td>{{trans.balance | currency:'USD':true:'1.2-2'}}</td>
+        <td>{{trans.date | date:'MM/yyyy'}}</td>
       </tr>
     </table>
   </section>
