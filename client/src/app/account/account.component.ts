@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import 'rxjs/add/operator/switchMap';
 
 import { AccountService } from '../services/account.service';
@@ -25,14 +27,14 @@ export class AccountComponent implements OnInit {
     this.route
       .paramMap
       .switchMap((params: ParamMap) => this.service.getAccount(params.get('id')))
-      .subscribe((res: Account) => {
-        this.account = res
-
-        // Reroute back to home page if account does not exist
-        if (this.account == null) {
+      .subscribe(
+        (res: Account) => {
+          this.account = res
+        },
+        (err: HttpErrorResponse) => {
+          // Reroute back to home page if account does not exist
           this.router.navigate(['/']);
-        }
-      });
+        });
   }
 
   depositOrWithdraw(transaction_type: string): void {
