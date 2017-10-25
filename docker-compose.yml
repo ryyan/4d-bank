@@ -6,6 +6,9 @@ services:
     - "8888:8888"
     volumes:
     - .:/app
+    - /app/server/node_modules
+    - /app/client/node_modules
+    - /app/client/dist
     links:
     - mongo
 
