@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -27,9 +28,10 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    RouterModule.forRoot(appRoutes),
+    FlexLayoutModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    RouterModule.forRoot(appRoutes)
+    MatButtonModule
   ],
   providers: [
     AccountService
