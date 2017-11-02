@@ -33,7 +33,7 @@ let accountSchema = mongoose.Schema({
 
 // Add time-to-live index
 accountSchema.index({
-  'createdAt': 1
+  'created_date': 1
 }, {
   expireAfterSeconds: 600
 });
@@ -55,8 +55,8 @@ async function createAccountHandler(req, res) {
 function createAccount(interest_rate) {
   return new Promise((resolve, reject) => {
     // Validate arguments
-    if (isNaN(interest_rate) || interest_rate < 0.001 || interest_rate > 0.1) {
-      return reject('Interest rate must be between 0.001 and 0.1');
+    if (isNaN(interest_rate) || interest_rate < 0.01 || interest_rate > 0.1) {
+      return reject('Interest rate must be between 0.01 and 0.1');
     }
 
     const account = new Account({
