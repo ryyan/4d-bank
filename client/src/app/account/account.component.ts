@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { DataSource } from '@angular/cdk/collections';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 
 import { AccountService } from '../services/account.service';
@@ -17,6 +21,11 @@ export class AccountComponent implements OnInit {
   account: Account;
   t_amount: number = 0.0;
 
+  /* Variables used for mat-table */
+  displayedColumns = ['t_type', 't_amount', 'balance', 'date'];
+  dataSource: DataSource<Transaction> | null;
+  dataChange: BehaviorSubject<Transaction[]> = new BehaviorSubject<Transaction[]>([]);
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -29,7 +38,11 @@ export class AccountComponent implements OnInit {
       .switchMap((params: ParamMap) => this.service.getAccount(params.get('id')))
       .subscribe(
         (res: Account) => {
-          this.account = res
+          this.account = res;
+          // Reverse transactions to date is in descending order
+          this.account.transactions.reverse();
+          this.dataSource = new AccountDataSource(this.dataChange);
+          this.dataChange.next(this.account.transactions);
         },
         (err: HttpErrorResponse) => {
           // Reroute back to home page if account does not exist
@@ -46,8 +59,9 @@ export class AccountComponent implements OnInit {
     this.service
       .updateBalance(this.account._id, transaction_type, this.t_amount)
       .subscribe((res: Transaction) => {
-        this.account.transactions.push(res);
+        this.account.transactions.unshift(res);
         this.updateBalance();
+        this.dataChange.next(this.account.transactions);
       });
   }
 
@@ -55,13 +69,14 @@ export class AccountComponent implements OnInit {
     this.service
       .updateTime(this.account._id, months)
       .subscribe((res: Transaction[]) => {
-        this.account.transactions.push(...res);
+        this.account.transactions.unshift(...res.reverse());
         this.updateBalance();
+        this.dataChange.next(this.account.transactions);
       });
   }
 
   updateBalance(): void {
-    this.account.balance = this.account.transactions[this.account.transactions.length - 1].balance;
+    this.account.balance = this.account.transactions[0].balance;
   }
 
   parseTransactionType(t: string): string {
@@ -76,4 +91,27 @@ export class AccountComponent implements OnInit {
         return 'Unknown';
     }
   }
+}
+
+/* Helper class used for mat-table */
+export class AccountDataSource extends DataSource<Transaction> {
+
+  constructor(
+    private dataChange: BehaviorSubject<Transaction[]>) {
+    super();
+  }
+
+  connect(): Observable<Transaction[]> {
+    return Observable.merge(this.dataChange);
+    /*
+    return Observable.of(
+      this.dataChange.subscribe(
+        (res: Transaction[]) => {return res;},
+        (err) => {console.log(err);},
+        () => {console.log('Completed');}
+    ));
+    */
+  }
+
+  disconnect() {}
 }

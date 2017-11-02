@@ -1,0 +1,26 @@
+* {
+  font-size: 20px;
+}
+
+p {
+  margin-top: 5px;
+  margin-bottom: 50px;
+}
+
+tr {
+  font-size: 20px;
+}
+
+mat-table {
+  max-height: 300px;
+  min-width: 600px;
+  overflow: auto;
+}
+
+#info {
+  text-align: left;
+}
+
+#transfer, #time {
+  text-align: center;
+}

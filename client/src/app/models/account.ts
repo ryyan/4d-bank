@@ -1,18 +1,15 @@
-export class Account {
-  constructor(
-    public _id: string,
-    public balance: number,
-    public interest_rate: number,
-    public created_date: number,
-    public current_date: string,
-    public transactions: Transaction[]) {
-  }
+export interface Account {
+  _id: string;
+  balance: number;
+  interest_rate: number;
+  created_date: number;
+  current_date: string;
+  transactions: Transaction[];
 }
 
-export class Transaction {
-  constructor(
-    public t_type: string,
-    public t_amount: number,
-    public balance: number,
-    public date: string) {}
+export interface Transaction {
+  t_type: string;
+  t_amount: number;
+  balance: number;
+  date: string;
 }

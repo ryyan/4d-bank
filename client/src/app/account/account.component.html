@@ -1,38 +1,65 @@
-<section id='account' *ngIf='account'>
-  <section id='account-info'>
-    <p>ID: {{account._id}}</p>
-    <p>Created: {{account.created_date | date:'MM/yyyy'}}</p>
-    <p>Interest Rate: {{account.interest_rate | percent:'1.2-2'}}</p>
-    <p>Balance: {{account.balance | currency:'USD':true:'1.2-2'}}</p>
-  </section>
+<mat-grid-list cols='2' rowHeight='220px' *ngIf='account'>
 
-  <section id='actions'>
-    <input [(ngModel)]='t_amount' placeholder='$'>
-    <button (click)='depositOrWithdraw("d")'>Deposit</button>
-    <button (click)='depositOrWithdraw("w")'>Withdraw</button>
-  </section>
+  <mat-grid-tile rowspan='2'>
+    <section id='info'>
+      <p>ID: {{account._id | slice:0:4}}...{{account._id | slice:-4}}</p>
+      <p>Created: {{account.created_date | date:'MM/yyyy'}}</p>
+      <p>Interest Rate: {{account.interest_rate | percent:'1.1-1'}}</p>
+      <p>Balance: {{account.balance | currency:'USD':'symbol':'1.2-2'}}</p>
+    </section>
+  </mat-grid-tile>
 
-  <section id='time'>
-    Advance time by 1...
-    <button (click)='advanceTime(1)'>Month</button>
-    <button (click)='advanceTime(12)'>Year</button>
-    <button (click)='advanceTime(120)'>Decade</button>
-  </section>
+  <mat-grid-tile>
+    <section id='transfer'>
+      <mat-form-field>
+        <span matPrefix>$ &nbsp;</span>
+        <input matInput [(ngModel)]='t_amount' placeholder='Transfer Funds'>
+      </mat-form-field>
+      <br />
+      <button mat-raised-button color='primary' (click)='depositOrWithdraw("d")'><mat-icon>add</mat-icon> &nbsp; Deposit</button>
+      <button mat-raised-button color='primary' (click)='depositOrWithdraw("w")'><mat-icon>remove</mat-icon> &nbsp; Withdraw</button>
+    </section>
+  </mat-grid-tile>
 
-  <section id='transactions'>
-    <table>
-      <tr>
-        <th>Type</th>
-        <th>Amount</th>
-        <th>Balance</th>
-        <th>Date</th>
-      </tr>
-      <tr *ngFor='let trans of account.transactions.reverse()'>
-        <td>{{parseTransactionType(trans.t_type)}}</td>
-        <td>{{trans.t_amount | currency:'USD':true:'1.2-2'}}</td>
-        <td>{{trans.balance | currency:'USD':true:'1.2-2'}}</td>
-        <td>{{trans.date | date:'MM/yyyy'}}</td>
-      </tr>
-    </table>
-  </section>
-</section>
+  <mat-grid-tile>
+    <section id='time'>
+      <p><mat-icon>alarm_add</mat-icon>&nbsp; Advance time by 1</p>
+      <button mat-raised-button color='accent' (click)='advanceTime(1)'>Month</button>
+      <button mat-raised-button color='accent' (click)='advanceTime(12)'>Year</button>
+      <button mat-raised-button color='accent' (click)='advanceTime(120)'>Decade</button>
+    </section>
+  </mat-grid-tile>
+
+  <mat-grid-tile rowspan='2' colspan='2'>
+    <section id='transactions'>
+      <mat-table #table [dataSource]='dataSource'>
+
+        <ng-container matColumnDef='t_type'>
+          <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+          <mat-cell *matCellDef='let transaction'>{{parseTransactionType(transaction.t_type)}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef='t_amount'>
+          <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+          <mat-cell *matCellDef='let transaction'>{{transaction.t_amount | currency:'USD':'symbol':'1.2-2'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef='balance'>
+          <mat-header-cell *matHeaderCellDef>Balance</mat-header-cell>
+          <mat-cell *matCellDef='let transaction'>{{transaction.balance | currency:'USD':'symbol':'1.2-2'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef='date'>
+          <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+          <mat-cell *matCellDef='let transaction'>{{transaction.date | date:'MM/yyyy'}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef='displayedColumns'></mat-header-row>
+        <mat-row *matRowDef='let row; columns: displayedColumns;'></mat-row>
+
+      </mat-table>
+
+    </section>
+  </mat-grid-tile>
+
+</mat-grid-list>

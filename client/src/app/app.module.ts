@@ -5,7 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatToolbarModule, MatIconModule, MatInputModule,
-         MatFormFieldModule, MatSliderModule, MatCardModule, MatGridListModule } from '@angular/material';
+         MatFormFieldModule, MatSliderModule, MatCardModule, MatGridListModule,
+         MatTableModule, MatPaginatorModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -37,7 +38,9 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatSliderModule,
     MatCardModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [
     AccountService
