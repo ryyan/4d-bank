@@ -11,6 +11,8 @@ import { Account, Transaction } from '../models/account';
 })
 export class HomeComponent implements OnInit {
 
+  private interest_rate: number = 0.01;
+
   constructor(
     private router: Router,
     private service: AccountService) { }
@@ -20,7 +22,11 @@ export class HomeComponent implements OnInit {
 
   createAccount(): void {
     this.service
-      .createAccount(0.01)
+      .createAccount(this.interest_rate)
       .subscribe(res => {this.router.navigate(['/account', res._id])});
+  }
+
+  sliderChange(e): void {
+    this.interest_rate = e.value;
   }
 }

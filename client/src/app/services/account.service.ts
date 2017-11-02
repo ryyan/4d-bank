@@ -13,7 +13,7 @@ export class AccountService {
 
   createAccount(interest_rate: number): Observable<Account> {
     return this.http.post<Account>(this.apiUrl, '', {
-      params: new HttpParams().set('irate', '0.01'),
+      params: new HttpParams().set('irate', interest_rate.toString()),
     });
   }
 

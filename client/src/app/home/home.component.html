@@ -1,4 +1,51 @@
-<section id='create-account'>
-  <h1>Create account</h1>
-  <button (click)='createAccount(0.01)'>Create Account</button>
+<section id='header'>
+  <h1>4D Bank</h1>
+  <h2>Personal banking taken to the next dimension</h2>
+</section>
+
+<section id='promo'>
+  <mat-card>
+    <mat-card-title>
+      <mat-icon>check_circle</mat-icon>
+    </mat-card-title>
+    <mat-card-content>
+      Create an account instantly!
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      <mat-icon>mood</mat-icon>
+    </mat-card-title>
+    <mat-card-content>
+      Choose your own interest rate!
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      <mat-icon>compare_arrows</mat-icon>
+    </mat-card-title>
+    <mat-card-content>
+      Instantly transfer funds!
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      <mat-icon>alarm</mat-icon>
+    </mat-card-title>
+    <mat-card-content>
+      One-button time control!
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<section id='create'>
+  <mat-card>
+    <mat-card-title><h1>Create Account</h1></mat-card-title>
+    <mat-card-content>
+      <p>Interest Rate: {{interest_rate | percent}}</p>
+      <mat-slider min='.01' max='.1' step='.01' [(ngModel)]='interest_rate' (input)='sliderChange($event)'></mat-slider>
+      <br />
+      <button mat-fab color='primary' (click)='createAccount()'>Go!</button>
+    </mat-card-content>
+  </mat-card>
 </section>
