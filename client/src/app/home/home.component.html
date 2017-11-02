@@ -4,48 +4,29 @@
 </section>
 
 <section id='promo'>
-  <mat-card>
-    <mat-card-title>
+  <mat-list>
+    <mat-list-item>
       <mat-icon>check_circle</mat-icon>
-    </mat-card-title>
-    <mat-card-content>
-      Create an account instantly!
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>
+      <p>Create an account instantly!</p>
+    </mat-list-item>
+    <mat-list-item>
       <mat-icon>mood</mat-icon>
-    </mat-card-title>
-    <mat-card-content>
-      Choose your own interest rate!
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>
+      <p>Choose your interest rate!</p>
+    </mat-list-item>
+    <mat-list-item>
       <mat-icon>compare_arrows</mat-icon>
-    </mat-card-title>
-    <mat-card-content>
-      Instantly transfer funds!
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>
+      <p>Instantly transfer funds!</p>
+    </mat-list-item>
+    <mat-list-item>
       <mat-icon>alarm</mat-icon>
-    </mat-card-title>
-    <mat-card-content>
-      One-button time control!
-    </mat-card-content>
-  </mat-card>
+      <p>One-button time control!</p>
+    </mat-list-item>
+  </mat-list>
 </section>
 
 <section id='create'>
-  <mat-card>
-    <mat-card-title><h2>Create Account</h2></mat-card-title>
-    <mat-card-content>
-      <p>Interest Rate: {{interest_rate | percent}}</p>
-      <mat-slider min='.01' max='.1' step='.01' [(ngModel)]='interest_rate' (input)='sliderChange($event)'></mat-slider>
-      <br />
-      <button mat-fab color='primary' (click)='createAccount()'>Go!</button>
-    </mat-card-content>
-  </mat-card>
+  <h2>Create Account</h2>
+  <mat-slider min='.01' max='.1' step='.01' [(ngModel)]='interest_rate' (input)='sliderChange($event)'></mat-slider>
+  <p>Interest Rate: {{interest_rate | percent}}</p>
+  <button mat-fab color='primary' (click)='createAccount()'>Go</button>
 </section>
