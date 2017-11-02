@@ -40,7 +40,7 @@
 
 <section id='create'>
   <mat-card>
-    <mat-card-title><h1>Create Account</h1></mat-card-title>
+    <mat-card-title><h2>Create Account</h2></mat-card-title>
     <mat-card-content>
       <p>Interest Rate: {{interest_rate | percent}}</p>
       <mat-slider min='.01' max='.1' step='.01' [(ngModel)]='interest_rate' (input)='sliderChange($event)'></mat-slider>
