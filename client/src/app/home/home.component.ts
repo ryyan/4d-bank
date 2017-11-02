@@ -11,7 +11,7 @@ import { Account, Transaction } from '../models/account';
 })
 export class HomeComponent implements OnInit {
 
-  private interest_rate: number = 0.01;
+  interest_rate: number = 0.01;
 
   constructor(
     private router: Router,
