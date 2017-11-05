@@ -2,19 +2,19 @@
   font-size: 20px;
 }
 
-p {
-  margin-top: 5px;
-  margin-bottom: 50px;
-}
-
-tr {
-  font-size: 20px;
+section {
+  min-width: 350px;
 }
 
 mat-table {
   max-height: 300px;
-  min-width: 500px;
+  min-width: 450px;
   overflow: auto;
+}
+
+mat-cell {
+  margin: 0 10 10 10;
+  font-size: 16px;
 }
 
 #transfer, #time {
@@ -25,9 +25,13 @@ mat-table {
   margin-bottom: 10px;
 }
 
+#info p {
+  margin-bottom: 50px;
+}
+
 .container {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: space-evenly;
   margin: 20px;
 }
@@ -41,4 +45,5 @@ mat-table {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
 }
