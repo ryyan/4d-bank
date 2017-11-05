@@ -1,36 +1,33 @@
-<mat-grid-list cols='2' rowHeight='220px' *ngIf='account'>
-
-  <mat-grid-tile rowspan='2'>
+<div class='container column' *ngIf='account'>
+  <div class='container row'>
     <section id='info'>
       <p>ID: {{account._id | slice:0:4}}...{{account._id | slice:-4}}</p>
       <p>Created: {{account.created_date | date:'MM/yyyy'}}</p>
       <p>Interest Rate: {{account.interest_rate | percent:'1.1-1'}}</p>
       <p>Balance: {{account.balance | currency:'USD':'symbol':'1.2-2'}}</p>
     </section>
-  </mat-grid-tile>
 
-  <mat-grid-tile>
-    <section id='transfer'>
-      <mat-form-field>
-        <span matPrefix>$ &nbsp;</span>
-        <input matInput [(ngModel)]='t_amount' placeholder='Transfer Funds'>
-      </mat-form-field>
-      <br />
-      <button mat-raised-button color='primary' (click)='depositOrWithdraw("d")'><mat-icon>add</mat-icon> &nbsp; Deposit</button>
-      <button mat-raised-button color='primary' (click)='depositOrWithdraw("w")'><mat-icon>remove</mat-icon> &nbsp; Withdraw</button>
-    </section>
-  </mat-grid-tile>
+    <div class='container column'>
+      <section id='transfer'>
+        <mat-form-field>
+          <span matPrefix>$ &nbsp;</span>
+          <input matInput [(ngModel)]='t_amount' placeholder='Transfer Funds'>
+        </mat-form-field>
+        <br />
+        <button mat-raised-button color='primary' (click)='depositOrWithdraw("d")'><mat-icon>add</mat-icon> &nbsp; Deposit</button>
+        <button mat-raised-button color='primary' (click)='depositOrWithdraw("w")'><mat-icon>remove</mat-icon> &nbsp; Withdraw</button>
+      </section>
 
-  <mat-grid-tile>
-    <section id='time'>
-      <p><mat-icon>alarm_add</mat-icon>&nbsp; Advance time by 1</p>
-      <button mat-raised-button color='accent' (click)='advanceTime(1)'>Month</button>
-      <button mat-raised-button color='accent' (click)='advanceTime(12)'>Year</button>
-      <button mat-raised-button color='accent' (click)='advanceTime(120)'>Decade</button>
-    </section>
-  </mat-grid-tile>
+      <section id='time'>
+        <p><mat-icon>alarm_add</mat-icon>&nbsp; Advance time by 1</p>
+        <button mat-raised-button color='accent' (click)='advanceTime(1)'>Month</button>
+        <button mat-raised-button color='accent' (click)='advanceTime(12)'>Year</button>
+        <button mat-raised-button color='accent' (click)='advanceTime(120)'>Decade</button>
+      </section>
+    </div>
+  </div>
 
-  <mat-grid-tile rowspan='2' colspan='2'>
+  <div class='container row'>
     <section id='transactions'>
       <mat-table #table [dataSource]='dataSource'>
 
@@ -58,8 +55,6 @@
         <mat-row *matRowDef='let row; columns: displayedColumns;'></mat-row>
 
       </mat-table>
-
     </section>
-  </mat-grid-tile>
-
-</mat-grid-list>
+  </div>
+</div>

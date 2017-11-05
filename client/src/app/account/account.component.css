@@ -13,14 +13,32 @@ tr {
 
 mat-table {
   max-height: 300px;
-  min-width: 600px;
+  min-width: 500px;
   overflow: auto;
 }
 
-#info {
-  text-align: left;
+#transfer, #time {
+  margin: 20px;
 }
 
-#transfer, #time {
-  text-align: center;
+#time p {
+  margin-bottom: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: space-evenly;
+  margin: 20px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
