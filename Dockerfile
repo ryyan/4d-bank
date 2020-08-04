@@ -5,11 +5,10 @@ EXPOSE 8888
 WORKDIR /app
 COPY . .
 
-RUN npm install -g yarn \
-    && cd client \
-    && yarn install \
-    && yarn run build \
+RUN cd client \
+    && npm install \
+    && npm run build \
     && cd ../server \
-    && yarn install
+    && npm install
 
 CMD ["node", "server/index.js"]
