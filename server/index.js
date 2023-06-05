@@ -1,8 +1,8 @@
-let express = require('express');
-let mongoose = require('mongoose');
-let uuidv4 = require('uuid/v4');
-let moment = require('moment');
-let path = require('path');
+const express = require('express');
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
+const moment = require('moment');
+const path = require('path');
 
 // Create mongo schema
 let accountSchema = mongoose.Schema({
