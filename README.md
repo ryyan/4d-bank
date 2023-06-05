@@ -4,6 +4,8 @@ Personal banking taken to the next dimension.
 
 Written with the MEAN stack.
 
+https://github.com/ryyan/4d-bank/assets/4228816/01223b9e-7ffa-4912-a90b-cadb9ca18fc3
+
 ## Build
 
 ```
